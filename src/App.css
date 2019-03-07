@@ -4,3 +4,7 @@
   justify-content: center;
   vertical-align: middle;
 }
+
+.app--padding {
+  padding: 15px;
+}
