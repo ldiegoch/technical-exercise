@@ -3,12 +3,35 @@ import "./App.css";
 import SearchBar from './components/search-bar/SearchBar';
 import StackGrid, { transitions, easings } from "react-stack-grid";
 import Image from "./components/image/Image";
-import photos from './temp/photos';
+import response from './temp/response';
 
 class App extends Component {
+  state = {
+    images: [],
+  };
   gutterWidth = 20;
-  gutterHeight=20;
-  columnWidth=300;
+  gutterHeight = 20;
+  columnWidth = 300;
+  componentDidMount() {
+    this.setState({
+      images: this.getImagesFromResponse(response)
+    });
+  }
+  getImagesFromResponse = (response) => {
+    return response.data.map(image => {
+      return {
+        id: image.id,
+        title: image.title,
+        originalImage: image.images.original.url,
+        originalWidth: image.images.original.width,
+        originalHeigth: image.images.original.height,
+        imageUrl: image.images.fixed_width_small.url,
+        width: image.images.fixed_width.width,
+        height: image.images.fixed_width.height,
+        imageStill: image.images.fixed_width_still.url,
+      };
+    })
+  };
   render() {
     return (
       <div>
@@ -18,15 +41,16 @@ class App extends Component {
           gutterWidth={this.gutterWidth}
           gutterHeight={this.gutterHeight}
         >
-          {photos.map(obj => (
+          {this.state.images.map(obj => (
             <Image
+              key={obj.id}
               src={obj.src}
-              label={obj.label}
-              height={300}
-              width={300}
-              image='https://media0.giphy.com/media/feqkVgjJpYtjy/200w.gif'
-              stillImage={obj.src}
-              originalImage="http://media0.giphy.com/media/feqkVgjJpYtjy/giphy.gif"
+              label={obj.title}
+              height={obj.height}
+              width={obj.width}
+              imageUrl={obj.imageUrl}
+              stillImage={obj.imageStill}
+              originalImage={obj.originalImage}
               originalWidth='300'
               originalHeight='300'
             />

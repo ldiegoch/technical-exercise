@@ -15,7 +15,7 @@ class Image extends Component {
   }
 
   render () {
-    const src = this.state.hover ? this.props.image : this.props.stillImage;
+    const src = this.state.hover ? this.props.imageUrl : this.props.stillImage;
     return (
       <div
         className='image'
