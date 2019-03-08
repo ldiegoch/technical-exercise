@@ -4,6 +4,7 @@ import SearchBar from './components/search-bar/SearchBar';
 import StackGrid, { transitions, easings } from "react-stack-grid";
 import Image from "./components/image/Image";
 import response from './temp/response';
+import connect from 'react-redux/es/connect/connect'
 
 class App extends Component {
   state = {
@@ -41,7 +42,7 @@ class App extends Component {
           gutterWidth={this.gutterWidth}
           gutterHeight={this.gutterHeight}
         >
-          {this.state.images.map(obj => (
+          {this.props.images.map(obj => (
             <Image
               key={obj.id}
               src={obj.src}
@@ -53,6 +54,7 @@ class App extends Component {
               originalImage={obj.originalImage}
               originalWidth='300'
               originalHeight='300'
+              columnWidth={this.columnWidth}
             />
           ))}
         </StackGrid>
@@ -61,4 +63,21 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToAppProps = (state) => {
+  return {
+    images: state.images,
+  };
+};
+
+const mapDispatchToAppProps = (dispatch) => (
+  {
+    dispatch: dispatch,
+  }
+);
+
+const ReduxApp = connect(
+  mapStateToAppProps,
+  mapDispatchToAppProps
+)(App);
+
+export default ReduxApp;

@@ -16,9 +16,11 @@ class Image extends Component {
 
   render () {
     const src = this.state.hover ? this.props.imageUrl : this.props.stillImage;
+    const ratio = this.props.columnWidth/this.props.width;
     return (
       <div
         className='image'
+        style={{width:this.props.columnWidth+'px'}}
         onMouseEnter={this.handleOnMouseEnter}
         onMouseLeave={this.handleOnMouseLeave}
       >
@@ -26,8 +28,8 @@ class Image extends Component {
           className='image__img--rounded'
           src={src}
           alt={this.props.label}
-          height={this.props.height}
-          width={this.props.width}
+          height={this.props.height * ratio}
+          width={this.props.columnWidth}
         />
         <div className='image__label'>{this.props.label}</div>
       </div>

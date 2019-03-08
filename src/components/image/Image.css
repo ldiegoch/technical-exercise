@@ -1,15 +1,18 @@
 .image {
     display: inline-block;
     background-color: white;
-    border-radius: 15px 15px 0 0;
+    border-radius: 15px;
     box-shadow: 5px 5px 15px -5px rgba(0,0,0,0.69);
 }
 
 .image__img--rounded {
-    border-radius: 15px;
+    border-radius: 15px 15px 0 0;
 }
 
 .image__label {
     padding: 1em;
     font-weight: 600;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
 }

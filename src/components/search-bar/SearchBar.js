@@ -2,18 +2,20 @@ import React, { Component } from "react";
 import searchBar from "./SearchBar.css";
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
+import client from './../../api/giphy';
 
 class SearchBar extends Component {
   state = {
     q: '',
   }
-
   dispatchSearch = debounce((q) => {
-    this.props.dispatch({
-      type: "ONSEARCH",
-      value: q,
+    const dispatch = this.props.dispatch;
+    client.search(this.state.q, (response) => {
+      dispatch({
+        type: "ONSEARCH",
+        value: response,
+      });
     });
-    console.log(this.state.q);
   }, 500);
 
   handleOnChange = (e) => {
