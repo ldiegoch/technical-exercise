@@ -1,29 +1,29 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import "./App.css";
 import SearchBar from './components/search-bar/SearchBar';
-import StackGrid, { transitions, easings } from "react-stack-grid";
+import StackGrid from "react-stack-grid";
 import Image from "./components/image/Image";
-import response from './temp/response';
+import MoreBtn from "./components/load-more-btn/LoadMoreBtn";
+import Message from "./components/message/Message";
+import random from './temp/random';
 import connect from 'react-redux/es/connect/connect';
 import client from './api/giphy';
 import debounce from 'lodash/debounce';
+import Lightbox from 'lightbox-react';
+import 'lightbox-react/style.css';
 
 class App extends Component {
   state = {
     images: [],
     loading: false,
+    photoIndex: 0,
+    isOpen: false,
   };
   gutterWidth = 20;
   gutterHeight = 20;
   columnWidth = 300;
-  componentDidMount() {
-    this.setState({
-      images: this.getImagesFromResponse(response)
-    });
-  }
   componentDidUpdate() {
-    if(this.props.images.length === 100) {
+    if(this.props.images.length > 90) {
       let top = Math.abs(window.pageYOffset * 0.66);
       window.scrollTo(0,top);
     }
@@ -69,11 +69,46 @@ class App extends Component {
       console.log(this.state);
     }
   }, 500);
+  handleOnLightboxClose = () => {
+    this.props.dispatch({
+      type: "CLOSEPHOTO"
+    });
+  };
+  handleOnLightboxNext = () => {
+    this.props.dispatch({
+      type: "NEXTPHOTO",
+    })
+  }
+  handleOnLightboxPrev = () => {
+    this.props.dispatch({
+      type: "PREVPHOTO",
+    })
+  }
   handleNextImages = () => {
     this.getNextImages();
   };
   render() {
-    console.log(this.props);
+    const isOpen = this.props.isOpen;
+    const photoIndex = this.props.photoIndex;
+    const items = this.props.images.length ? this.props.images.map(obj => (
+      <Image
+        key={obj.id}
+        id={obj.id}
+        src={obj.src}
+        label={obj.title}
+        height={obj.height}
+        width={obj.width}
+        imageUrl={obj.imageUrl}
+        stillImage={obj.imageStill}
+        originalImage={obj.originalImage}
+        originalWidth='300'
+        originalHeight='300'
+        columnWidth={this.columnWidth}
+      />
+    )) : random.map( obj => (
+      <div style={ {"background-color": obj.color, "width": obj.width, "height": obj.height} } >
+      </div>
+    ));
     return (
       <div id='app-container'>
         <SearchBar/>
@@ -82,30 +117,28 @@ class App extends Component {
           gutterWidth={this.gutterWidth}
           gutterHeight={this.gutterHeight}
         >
-          {this.props.images.map(obj => (
-            <Image
-              key={obj.id}
-              src={obj.src}
-              label={obj.title}
-              height={obj.height}
-              width={obj.width}
-              imageUrl={obj.imageUrl}
-              stillImage={obj.imageStill}
-              originalImage={obj.originalImage}
-              originalWidth='300'
-              originalHeight='300'
-              columnWidth={this.columnWidth}
-            />
-          ))}
+          { items }
         </StackGrid>
         { this.props.offset > 0 ? (
-            <div
-              style={{height:"20px",display:"block", width: '100%'}}
-              onMouseEnter={this.handleNextImages}
-            ></div>
+            <MoreBtn onNextImages={this.handleNextImages} isLoading={this.state.loading}/>
           ) : null
         }
 
+        { this.props.images.length === 0 && (
+            <Message message='Enter a new search terms'/>
+        )}
+
+        {isOpen && (
+          <Lightbox
+            mainSrc={this.props.images[photoIndex].originalImage}
+            nextSrc={this.props.images[(photoIndex + 1) % this.props.images.length].originalImage}
+            prevSrc={this.props.images[(photoIndex + this.props.images.length - 1) % this.props.images.length].originalImage}
+            onCloseRequest={this.handleOnLightboxClose}
+            onMovePrevRequest={this.handleOnLightboxPrev}
+            onMoveNextRequest={this.handleOnLightboxNext}
+          />
+        )}
+        {  }
       </div>
     );
   }
@@ -117,6 +150,8 @@ const mapStateToAppProps = (state) => {
     totalCount: state.totalCount,
     offset: state.offset,
     q: state.q,
+    isOpen: state.isOpen,
+    photoIndex: state.photoIndex,
   };
 };
 

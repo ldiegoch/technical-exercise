@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import searchBar from "./SearchBar.css";
+import "./SearchBar.css";
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import client from './../../api/giphy';

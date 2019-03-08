@@ -18,7 +18,7 @@ function checkStatus(response) {
   } else {
     const error = new Error(`HTTP Error ${response.statusText}`);
     error.status = response.statusText;
-    error.response = response;
+    error.random = response;
     console.log(error); // eslint-disable-line no-console
     throw error;
   }

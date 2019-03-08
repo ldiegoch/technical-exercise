@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "lightbox-react": "^0.3.7",
     "lodash.debounce": "^4.0.8",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",

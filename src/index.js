@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import response from './temp/response'
 
 function reducer(state = {images:[], totalCount: 0, offset: 0, q: ''}, action) {
   switch (action.type) {
@@ -25,10 +24,43 @@ function reducer(state = {images:[], totalCount: 0, offset: 0, q: ''}, action) {
       });
       break;
     }
+    case 'OPENPHOTO': {
+      return Object.assign({},state,{
+        isOpen: true,
+        photoIndex: findImageIndex(state.images, action.value),
+      })
+      break;
+    }
+    case 'CLOSEPHOTO': {
+      return Object.assign({},state,{
+        isOpen: false,
+      })
+      break;
+    }
+    case 'NEXTPHOTO': {
+      return Object.assign({},state,{
+        photoIndex: (state.photoIndex + 1) % state.images.length,
+      })
+      break;
+    }
+    case 'PREVPHOTO': {
+      return Object.assign({},state,{
+        photoIndex: (state.photoIndex + state.images.length - 1) % state.images.length,
+      })
+      break;
+    }
     default: {
       return state;
     }
   }
+}
+
+function findImageIndex(images, id) {
+  var index = images.findIndex((image) => {
+    return image.id === id;
+  });
+  console.log(index);
+  return index;
 }
 
 function consolidateImages(currentImages, response) {

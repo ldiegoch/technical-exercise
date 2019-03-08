@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import styles from './Image.css';
+import { connect } from 'react-redux';
+import './Image.css';
 
 class Image extends Component {
   state = {
@@ -14,6 +15,15 @@ class Image extends Component {
     this.setState({ hover: false });
   }
 
+  handleOnMouseClick = () => {
+    if(!this.props.isOpen) {
+      this.props.dispatch({
+        type: "OPENPHOTO",
+        value: this.props.id,
+      });
+    }
+  }
+
   render () {
     const src = this.state.hover ? this.props.imageUrl : this.props.stillImage;
     const ratio = this.props.columnWidth/this.props.width;
@@ -23,6 +33,7 @@ class Image extends Component {
         style={{width:this.props.columnWidth+'px'}}
         onMouseEnter={this.handleOnMouseEnter}
         onMouseLeave={this.handleOnMouseLeave}
+        onClick={this.handleOnMouseClick}
       >
         <img
           className='image__img--rounded'
@@ -37,4 +48,21 @@ class Image extends Component {
   }
 }
 
-export default Image;
+const mapStateToImageProps = (state) => {
+  return {
+    isOpen: state.isOpen,
+  };
+};
+
+const mapDispatchToImageProps = (dispatch) => (
+  {
+    dispatch: dispatch,
+  }
+);
+
+const ReduxImage = connect(
+  mapStateToImageProps,
+  mapDispatchToImageProps
+)(Image);
+
+export default ReduxImage;
