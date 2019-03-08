@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "lightbox-react": "^0.3.7",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
-    "react-scripts": "2.1.1"
+    "react-redux": "5.0.5",
+    "react-scripts": "2.1.1",
+    "react-stack-grid": "^0.7.1",
+    "redux": "3.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
