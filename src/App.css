@@ -1,8 +1,10 @@
 #root {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  vertical-align: middle;
+  padding-top: 80px;
+  padding-bottom: 30px;
+}
+
+body {
+  background-color: rgb(244,247,246);
 }
 
 .app--padding {
