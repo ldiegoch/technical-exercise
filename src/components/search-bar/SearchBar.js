@@ -10,10 +10,11 @@ class SearchBar extends Component {
   }
   dispatchSearch = debounce((q) => {
     const dispatch = this.props.dispatch;
-    client.search(this.state.q, (response) => {
+    client.search({ q: this.state.q, offset: 0 }, (response) => {
       dispatch({
         type: "ONSEARCH",
         value: response,
+        q: this.state.q,
       });
     });
   }, 500);
@@ -42,7 +43,8 @@ class SearchBar extends Component {
 
 const mapStateToSearchBarProps = (state) => {
   return {
-    q: state.q,
+    totalCount: state.totalCount,
+    offset: state.offset,
   };
 };
 

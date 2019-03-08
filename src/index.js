@@ -6,17 +6,34 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import response from './temp/response'
 
-function reducer(state = {images:[]}, action) {
+function reducer(state = {images:[], totalCount: 0, offset: 0, q: ''}, action) {
   switch (action.type) {
     case 'ONSEARCH': {
       return Object.assign({},state,{
-        images: getImagesFromResponse(action.value)
+        images: getImagesFromResponse(action.value),
+        totalCount: action.value.pagination.total_count,
+        offset: action.value.pagination.count,
+        q: action.q,
       });
+      break;
+    }
+    case 'ONNEXTRESULTS': {
+      return Object.assign({},state,{
+        images: consolidateImages(state.images, action.value),
+        totalCount: action.value.pagination.total_count,
+        offset: state.offset + action.value.pagination.count,
+      });
+      break;
     }
     default: {
       return state;
     }
   }
+}
+
+function consolidateImages(currentImages, response) {
+  let images = currentImages.concat(getImagesFromResponse(response));
+  return (images.length > 150) ? images.slice(100) : images;
 }
 
 function getImagesFromResponse(response) {

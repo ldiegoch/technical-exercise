@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 function search(query, cb) {
   return fetch(
-    `http://api.giphy.com/v1/gifs/search?q=` + encodeURI(query) + '&api_key=LiT4XaeBUDCDtVpLNuTcc8fzKv84AmW6',
+    `http://api.giphy.com/v1/gifs/search?q=` + encodeURI(query.q) + '&api_key=LiT4XaeBUDCDtVpLNuTcc8fzKv84AmW6&offset=' + query.offset,
     {
       accept: 'application/json',
       method: 'GET'
